@@ -1,12 +1,13 @@
 'use client';
 
+import { PATH_DEFAULT } from '@/constants/path';
 import { useAuthContext } from '@/context/useAuthContext';
 import { Locale } from '@/i18n-config';
 import { Email as EmailIcon, Lock as LockIcon, LoginOutlined, Visibility, VisibilityOff } from '@mui/icons-material';
-import { Alert, Box, Button, Container, Fade, Grow, IconButton, InputAdornment, Link as MuiLink, Paper, Skeleton, TextField, Typography } from '@mui/material';
+import { Alert, Box, Button, Container, Fade, Grow, IconButton, InputAdornment, Link as MuiLink, Paper, TextField, Typography } from '@mui/material';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { useCallback, useEffect, useState, useTransition } from 'react';
+import { useCallback, useState, useTransition } from 'react';
 
 interface LoginFormProps {
   dict: any;
@@ -14,18 +15,12 @@ interface LoginFormProps {
 }
 
 export default function LoginForm({ dict, lang }: LoginFormProps) {
-  const { login, isAuthenticated, loading: authLoading } = useAuthContext();
+  const { login } = useAuthContext();
   const [form, setForm] = useState({ email: '', password: '' });
   const [error, setError] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [isPending, startTransition] = useTransition();
   const router = useRouter();
-
-  useEffect(() => {
-    if (!authLoading && isAuthenticated) {
-      router.push(`/${lang}/dashboard`);
-    }
-  }, [authLoading, isAuthenticated, lang, router]);
 
   const handleChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -38,7 +33,7 @@ export default function LoginForm({ dict, lang }: LoginFormProps) {
     startTransition(async () => {
       try {
         await login(form);
-        router.push(`/${lang}/dashboard`);
+        router.push(`/${lang}/${PATH_DEFAULT.dashboard}`);
       } catch {
         setError(dict.auth.login.invalid || 'An error occurred during login');
       }
@@ -48,28 +43,6 @@ export default function LoginForm({ dict, lang }: LoginFormProps) {
   const togglePasswordVisibility = useCallback(() => {
     setShowPassword((prev) => !prev);
   }, []);
-
-  const LoginSkeleton = (
-    <Container maxWidth="sm" className="mt-8 mb-8">
-      <Paper elevation={0} className="p-8 bg-gradient-to-br from-white/80 to-gray-50/80 backdrop-blur-sm border border-gray-200/50 shadow-xl rounded-2xl">
-        <Box className="text-center mb-6">
-          <Skeleton variant="text" width="60%" height={48} className="mx-auto mb-4" />
-          <Skeleton variant="text" width="80%" height={24} className="mx-auto" />
-        </Box>
-        <Box className="space-y-4">
-          <Skeleton variant="rectangular" height={56} className="rounded-lg" />
-          <Skeleton variant="rectangular" height={56} className="rounded-lg" />
-          <Skeleton variant="rectangular" height={48} className="rounded-lg mt-6" />
-        </Box>
-        <Box className="text-center mt-6">
-          <Skeleton variant="text" width="70%" height={20} className="mx-auto" />
-        </Box>
-      </Paper>
-    </Container>
-  );
-
-  if (authLoading) return LoginSkeleton;
-  if (isAuthenticated) return null;
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 flex items-center justify-center p-4">

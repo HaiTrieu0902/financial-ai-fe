@@ -1,13 +1,14 @@
 'use client';
 
-import { useState, useEffect } from 'react';
-import { Alert, Box, Button, Container, Fade, Grow, InputAdornment, Paper, TextField, Typography, Link as MuiLink } from '@mui/material';
 import { Email as EmailIcon, Lock as LockIcon, LoginOutlined } from '@mui/icons-material';
+import { Alert, Box, Button, Container, Fade, Grow, InputAdornment, Link as MuiLink, Paper, TextField, Typography } from '@mui/material';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
+import { useState } from 'react';
 
-import { Locale } from '@/i18n-config';
 import { useAuthContext } from '@/context/useAuthContext';
+import { Locale } from '@/i18n-config';
+import { PATH_DEFAULT } from '@/constants/path';
 
 interface RegisterFormProps {
   dict: any;
@@ -15,7 +16,7 @@ interface RegisterFormProps {
 }
 
 export default function RegisterForm({ dict, lang }: RegisterFormProps) {
-  const { register, isAuthenticated, loading: authLoading } = useAuthContext();
+  const { register } = useAuthContext();
   const [form, setForm] = useState({
     firstName: '',
     lastName: '',
@@ -26,12 +27,6 @@ export default function RegisterForm({ dict, lang }: RegisterFormProps) {
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   const router = useRouter();
-
-  useEffect(() => {
-    if (!authLoading && isAuthenticated) {
-      router.push(`/${lang}/dashboard`);
-    }
-  }, [authLoading, isAuthenticated, lang, router]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -53,16 +48,13 @@ export default function RegisterForm({ dict, lang }: RegisterFormProps) {
         email: form.email,
         password: form.password,
       });
-      router.push(`/${lang}/dashboard`);
+      router.push(`/${lang}/${PATH_DEFAULT.dashboard}`);
     } catch (err) {
       setError('An error occurred during registration');
     } finally {
       setLoading(false);
     }
   };
-
-  if (authLoading) return null;
-  if (isAuthenticated) return null;
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 flex items-center justify-center p-4">
@@ -92,9 +84,10 @@ export default function RegisterForm({ dict, lang }: RegisterFormProps) {
 
             {/* Form */}
             <Box component="form" onSubmit={handleSubmit} className="space-y-6">
-              <TextField fullWidth name="firstName" label={dict.auth.register.firstName} value={form.firstName} onChange={handleChange} required />
-              <TextField fullWidth name="lastName" label={dict.auth.register.lastName} value={form.lastName} onChange={handleChange} required />
+              <TextField size="small" fullWidth name="firstName" label={dict.auth.register.firstName} value={form.firstName} onChange={handleChange} required />
+              <TextField size="small" fullWidth name="lastName" label={dict.auth.register.lastName} value={form.lastName} onChange={handleChange} required />
               <TextField
+                size="small"
                 fullWidth
                 name="email"
                 label={dict.auth.register.email}
@@ -111,6 +104,7 @@ export default function RegisterForm({ dict, lang }: RegisterFormProps) {
                 }}
               />
               <TextField
+                size="small"
                 fullWidth
                 name="password"
                 label={dict.auth.register.password}
@@ -127,6 +121,7 @@ export default function RegisterForm({ dict, lang }: RegisterFormProps) {
                 }}
               />
               <TextField
+                size="small"
                 fullWidth
                 name="confirmPassword"
                 label={dict.auth.register.confirmPassword}
