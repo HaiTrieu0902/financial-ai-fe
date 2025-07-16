@@ -1,6 +1,8 @@
+'use client';
+import { use } from 'react';
 import AuthGuard from '@/components/guard/AuthGuard';
 import SidebarLayout from '@/components/layout/SidebarLayout';
-import { getDictionary } from '@/dictionaries';
+import { I18nProvider } from '@/context/I18nContext';
 import { Locale } from '@/i18n-config';
 
 interface AuthLayoutProps {
@@ -8,15 +10,14 @@ interface AuthLayoutProps {
   params: Promise<{ lang: Locale }>;
 }
 
-export default async function AuthContainerLayout({ children, params }: AuthLayoutProps) {
-  const { lang } = await params;
-  const dict = await getDictionary(lang);
+export default function AuthContainerLayout({ children, params }: AuthLayoutProps) {
+  const { lang } = use(params);
 
   return (
-    <AuthGuard>
-      <SidebarLayout dict={dict} lang={lang}>
-        {children}
-      </SidebarLayout>
-    </AuthGuard>
+    <I18nProvider initialLang={lang}>
+      <AuthGuard>
+        <SidebarLayout>{children}</SidebarLayout>
+      </AuthGuard>
+    </I18nProvider>
   );
 }

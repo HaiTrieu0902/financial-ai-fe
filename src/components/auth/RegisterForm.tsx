@@ -1,14 +1,26 @@
 'use client';
 
 import { Email as EmailIcon, Lock as LockIcon, LoginOutlined } from '@mui/icons-material';
-import { Alert, Box, Button, Container, Fade, Grow, InputAdornment, Link as MuiLink, Paper, TextField, Typography } from '@mui/material';
+import {
+  Alert,
+  Box,
+  Button,
+  Container,
+  Fade,
+  Grow,
+  InputAdornment,
+  Link as MuiLink,
+  Paper,
+  TextField,
+  Typography,
+} from '@mui/material';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 
+import { PATH_DEFAULT } from '@/constants/path';
 import { useAuthContext } from '@/context/useAuthContext';
 import { Locale } from '@/i18n-config';
-import { PATH_DEFAULT } from '@/constants/path';
 
 interface RegisterFormProps {
   dict: any;
@@ -60,13 +72,20 @@ export default function RegisterForm({ dict, lang }: RegisterFormProps) {
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 flex items-center justify-center p-4">
       <Container maxWidth="sm">
         <Grow in timeout={800}>
-          <Paper elevation={0} className="p-8 bg-gradient-to-br from-white/90 to-gray-50/90 backdrop-blur-sm border border-gray-200/50 shadow-2xl rounded-3xl">
+          <Paper
+            elevation={0}
+            className="p-8 bg-gradient-to-br from-white/90 to-gray-50/90 backdrop-blur-sm border border-gray-200/50 shadow-2xl rounded-3xl"
+          >
             {/* Header */}
             <Box className="text-center mb-8">
               <Box className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-r from-green-500 to-teal-600 rounded-2xl mb-4 shadow-lg">
                 <LoginOutlined className="text-white text-2xl" />
               </Box>
-              <Typography variant="h4" component="h1" className="font-bold bg-gradient-to-r from-gray-900 to-gray-600 bg-clip-text text-transparent mb-2">
+              <Typography
+                variant="h4"
+                component="h1"
+                className="font-bold bg-gradient-to-r from-gray-900 to-gray-600 bg-clip-text text-transparent mb-2"
+              >
                 {dict.auth.register.title}
               </Typography>
               <Typography variant="body1" className="text-gray-600">
@@ -84,8 +103,24 @@ export default function RegisterForm({ dict, lang }: RegisterFormProps) {
 
             {/* Form */}
             <Box component="form" onSubmit={handleSubmit} className="space-y-6">
-              <TextField size="small" fullWidth name="firstName" label={dict.auth.register.firstName} value={form.firstName} onChange={handleChange} required />
-              <TextField size="small" fullWidth name="lastName" label={dict.auth.register.lastName} value={form.lastName} onChange={handleChange} required />
+              <TextField
+                size="small"
+                fullWidth
+                name="firstName"
+                label={dict.auth.register.firstName}
+                value={form.firstName}
+                onChange={handleChange}
+                required
+              />
+              <TextField
+                size="small"
+                fullWidth
+                name="lastName"
+                label={dict.auth.register.lastName}
+                value={form.lastName}
+                onChange={handleChange}
+                required
+              />
               <TextField
                 size="small"
                 fullWidth
@@ -138,9 +173,13 @@ export default function RegisterForm({ dict, lang }: RegisterFormProps) {
                 disabled={loading}
                 className="rounded-xl font-semibold text-lg shadow-lg transition-all duration-300 hover:shadow-xl hover:-translate-y-0.5"
                 sx={{
-                  background: loading ? 'linear-gradient(135deg, #9ca3af 0%, #6b7280 100%)' : 'linear-gradient(135deg, #10b981 0%, #06b6d4 100%)',
+                  background: loading
+                    ? 'linear-gradient(135deg, #9ca3af 0%, #6b7280 100%)'
+                    : 'linear-gradient(135deg, #10b981 0%, #06b6d4 100%)',
                   '&:hover': {
-                    background: loading ? 'linear-gradient(135deg, #9ca3af 0%, #6b7280 100%)' : 'linear-gradient(135deg, #059669 0%, #0891b2 100%)',
+                    background: loading
+                      ? 'linear-gradient(135deg, #9ca3af 0%, #6b7280 100%)'
+                      : 'linear-gradient(135deg, #059669 0%, #0891b2 100%)',
                   },
                   textTransform: 'none',
                 }}

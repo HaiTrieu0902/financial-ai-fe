@@ -9,7 +9,10 @@ import { useEffect, useState } from 'react';
  * @param {any} defaultValue - The default value if not found in localStorage
  * @returns {[any, Function, Function, Function]} [value, setValue, removeValue, getValue]
  */
-export function useLocalStorageSync<T>(key: string, defaultValue: T | null): [T | null, (val: T) => void, () => void, () => T | null] {
+export function useLocalStorageSync<T>(
+  key: string,
+  defaultValue: T | null,
+): [T | null, (val: T) => void, () => void, () => T | null] {
   const [value, setValueState] = useState(() => {
     try {
       const stored = localStorage.getItem(key);
@@ -24,7 +27,9 @@ export function useLocalStorageSync<T>(key: string, defaultValue: T | null): [T 
     if (value === null || value === undefined) {
       localStorage.removeItem(key);
     } else {
-      localStorage.setItem(key, JSON.stringify(value));
+      // For token, store as plain string. For other values, stringify them.
+      const valueToStore = key === KEY_LOCALSTORAGE_SYNC.token ? value : JSON.stringify(value);
+      localStorage.setItem(key, valueToStore as string);
     }
   }, [key, value]);
 
@@ -40,7 +45,10 @@ export function useLocalStorageSync<T>(key: string, defaultValue: T | null): [T 
   const getValue = () => {
     try {
       const item = localStorage.getItem(key);
-      return item ? JSON.parse(item) : null;
+      if (!item) return null;
+
+      // For token, return as plain string. For other values, parse JSON.
+      return key === KEY_LOCALSTORAGE_SYNC.token ? item : JSON.parse(item);
     } catch (e) {
       return null;
     }

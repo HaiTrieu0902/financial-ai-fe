@@ -1,8 +1,8 @@
 'use client';
 
-import React from 'react';
-import { Box, Card, CardContent, Typography, Button, Alert } from '@mui/material';
 import { Error, Refresh } from '@mui/icons-material';
+import { Alert, Box, Button, Card, CardContent, Typography } from '@mui/material';
+import React from 'react';
 
 interface ErrorBoundaryState {
   hasError: boolean;
@@ -87,5 +87,5 @@ function DefaultErrorFallback({ error, reset }: ErrorFallbackProps) {
   );
 }
 
-export { ErrorBoundary, DefaultErrorFallback };
+export { DefaultErrorFallback, ErrorBoundary };
 export type { ErrorBoundaryProps, ErrorFallbackProps };

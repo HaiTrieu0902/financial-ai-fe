@@ -1,5 +1,5 @@
-import Link from 'next/link'
-import { Box, Typography, Button } from '@mui/material'
+import Link from 'next/link';
+import { Box, Typography, Button } from '@mui/material';
 
 export default function NotFound() {
   return (
@@ -25,5 +25,5 @@ export default function NotFound() {
         Return Home
       </Button>
     </Box>
-  )
+  );
 }

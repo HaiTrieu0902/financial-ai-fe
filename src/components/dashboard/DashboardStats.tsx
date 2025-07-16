@@ -3,38 +3,22 @@
 import { useAuthContext } from '@/context/useAuthContext';
 import { useAccount } from '@/hooks/useAccount';
 import { formatCurrency } from '@/utils';
+import { AccountBalance, ArrowDownward, ArrowUpward, MoreVert, TrendingDown, TrendingUp } from '@mui/icons-material';
 import {
-  TrendingUp,
-  TrendingDown,
-  AccountBalance,
-  Savings,
-  CreditCard,
-  AccountBalanceWallet,
-  MoreVert,
-  ArrowUpward,
-  ArrowDownward,
-  Add,
-  Visibility,
-} from '@mui/icons-material';
-import {
+  Avatar,
   Box,
+  Button,
   Card,
   CardContent,
   Grid,
-  Typography,
-  LinearProgress,
-  Chip,
   IconButton,
-  Avatar,
-  Button,
   Table,
   TableBody,
   TableCell,
   TableContainer,
   TableHead,
   TableRow,
-  Paper,
-  alpha,
+  Typography,
   useTheme,
 } from '@mui/material';
 import { useRouter } from 'next/navigation';

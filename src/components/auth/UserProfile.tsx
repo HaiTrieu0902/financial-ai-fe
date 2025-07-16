@@ -1,27 +1,26 @@
 'use client';
 
 import { useAuthContext } from '@/context/useAuthContext';
-import { authApiService } from '@/service/api/auth.api';
 import { User } from '@/interface/types';
-import { AccountCircle, Edit, Save, Cancel, Person, Email, Badge, Security, Logout, Delete } from '@mui/icons-material';
+import { authApiService } from '@/service/api/auth.api';
+import { Badge, Cancel, Delete, Edit, Email, Logout, Person, Save, Security } from '@mui/icons-material';
 import {
+  Alert,
+  Avatar,
   Box,
+  Button,
   Card,
   CardContent,
-  Typography,
-  Grid,
-  Avatar,
-  Button,
-  TextField,
-  Divider,
-  Alert,
-  Dialog,
-  DialogTitle,
-  DialogContent,
-  DialogActions,
   Chip,
-  IconButton,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
+  Divider,
+  Grid,
   Skeleton,
+  TextField,
+  Typography,
 } from '@mui/material';
 import { useEffect, useState } from 'react';
 

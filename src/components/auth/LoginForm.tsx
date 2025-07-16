@@ -1,5 +1,4 @@
 'use client';
-
 import { PATH_DEFAULT } from '@/constants/path';
 import { useAuthContext } from '@/context/useAuthContext';
 import { Locale } from '@/i18n-config';
@@ -43,10 +42,11 @@ export default function LoginForm({ dict, lang }: LoginFormProps) {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError('');
+
     startTransition(async () => {
       try {
         await login(form);
-        // router.push(`/${lang}/${PATH_DEFAULT.dashboard}`);
+        router.push(`/${lang}/${PATH_DEFAULT.dashboard}`);
       } catch {
         setError(dict.auth.login.invalid || 'An error occurred during login');
       }

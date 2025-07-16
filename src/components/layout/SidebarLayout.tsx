@@ -1,6 +1,7 @@
 'use client';
 
 import { useAuthContext } from '@/context/useAuthContext';
+import { useI18n } from '@/context/I18nContext';
 import { Locale } from '@/i18n-config';
 import ChatDrawer from '@/components/ChatDrawer';
 import {
@@ -47,8 +48,6 @@ import { useState, ReactNode } from 'react';
 
 interface SidebarLayoutProps {
   children: ReactNode;
-  dict: any;
-  lang: Locale;
 }
 
 interface NavItem {
@@ -60,7 +59,8 @@ interface NavItem {
 
 const DRAWER_WIDTH = 280;
 
-export default function SidebarLayout({ children, dict, lang }: SidebarLayoutProps) {
+export default function SidebarLayout({ children }: SidebarLayoutProps) {
+  const { dict, lang } = useI18n();
   const { user, logout } = useAuthContext();
   const router = useRouter();
   const pathname = usePathname();
