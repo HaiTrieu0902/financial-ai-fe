@@ -1,5 +1,6 @@
 import { AuthResponse, LoginRequest, RegisterRequest } from '@/interface/auth.interface';
 import client from '.';
+import { User } from '@/interface/types';
 
 class AuthApiService {
   // Auth endpoints
@@ -19,8 +20,23 @@ class AuthApiService {
   }
 
   // User endpoints
-  async getUsers(): Promise<any[]> {
+  async getUsers(): Promise<User[]> {
     const response = await client.get('/users');
+    return response.data;
+  }
+
+  async getUserCurrentProfile(): Promise<User> {
+    const response = await client.get(`/users/profile`);
+    return response.data;
+  }
+
+  async getUserById(id: string): Promise<User> {
+    const response = await client.get(`/users/${id}`);
+    return response.data;
+  }
+
+  async createUser(userData: Omit<User, 'id'>): Promise<User> {
+    const response = await client.post<User>('/users', userData);
     return response.data;
   }
 

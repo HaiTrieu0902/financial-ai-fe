@@ -4,7 +4,20 @@ import { PATH_DEFAULT } from '@/constants/path';
 import { useAuthContext } from '@/context/useAuthContext';
 import { Locale } from '@/i18n-config';
 import { Email as EmailIcon, Lock as LockIcon, LoginOutlined, Visibility, VisibilityOff } from '@mui/icons-material';
-import { Alert, Box, Button, Container, Fade, Grow, IconButton, InputAdornment, Link as MuiLink, Paper, TextField, Typography } from '@mui/material';
+import {
+  Alert,
+  Box,
+  Button,
+  Container,
+  Fade,
+  Grow,
+  IconButton,
+  InputAdornment,
+  Link as MuiLink,
+  Paper,
+  TextField,
+  Typography,
+} from '@mui/material';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useCallback, useState, useTransition } from 'react';
@@ -33,7 +46,7 @@ export default function LoginForm({ dict, lang }: LoginFormProps) {
     startTransition(async () => {
       try {
         await login(form);
-        router.push(`/${lang}/${PATH_DEFAULT.dashboard}`);
+        // router.push(`/${lang}/${PATH_DEFAULT.dashboard}`);
       } catch {
         setError(dict.auth.login.invalid || 'An error occurred during login');
       }
@@ -48,13 +61,20 @@ export default function LoginForm({ dict, lang }: LoginFormProps) {
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 flex items-center justify-center p-4">
       <Container maxWidth="sm">
         <Grow in timeout={800}>
-          <Paper elevation={0} className="p-8 bg-gradient-to-br from-white/90 to-gray-50/90 backdrop-blur-sm border border-gray-200/50 shadow-2xl rounded-3xl">
+          <Paper
+            elevation={0}
+            className="p-8 bg-gradient-to-br from-white/90 to-gray-50/90 backdrop-blur-sm border border-gray-200/50 shadow-2xl rounded-3xl"
+          >
             {/* Header */}
             <Box className="text-center mb-8">
               <Box className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-r from-blue-500 to-purple-600 rounded-2xl mb-4 shadow-lg">
                 <LoginOutlined className="text-white text-2xl" />
               </Box>
-              <Typography variant="h4" component="h1" className="font-bold bg-gradient-to-r from-gray-900 to-gray-600 bg-clip-text text-transparent mb-2">
+              <Typography
+                variant="h4"
+                component="h1"
+                className="font-bold bg-gradient-to-r from-gray-900 to-gray-600 bg-clip-text text-transparent mb-2"
+              >
                 {dict.auth.login.title}
               </Typography>
               <Typography variant="body1" className="text-gray-600">
@@ -126,9 +146,13 @@ export default function LoginForm({ dict, lang }: LoginFormProps) {
                 disabled={isPending}
                 className=" rounded-xl font-semibold text-lg shadow-lg transition-all duration-300 hover:shadow-xl hover:-translate-y-0.5"
                 sx={{
-                  background: isPending ? 'linear-gradient(135deg, #9ca3af 0%, #6b7280 100%)' : 'linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%)',
+                  background: isPending
+                    ? 'linear-gradient(135deg, #9ca3af 0%, #6b7280 100%)'
+                    : 'linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%)',
                   '&:hover': {
-                    background: isPending ? 'linear-gradient(135deg, #9ca3af 0%, #6b7280 100%)' : 'linear-gradient(135deg, #2563eb 0%, #7c3aed 100%)',
+                    background: isPending
+                      ? 'linear-gradient(135deg, #9ca3af 0%, #6b7280 100%)'
+                      : 'linear-gradient(135deg, #2563eb 0%, #7c3aed 100%)',
                   },
                   textTransform: 'none',
                 }}

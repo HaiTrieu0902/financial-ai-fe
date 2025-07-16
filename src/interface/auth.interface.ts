@@ -1,3 +1,5 @@
+import { User } from './types';
+
 export interface LoginRequest {
   email: string;
   password: string;
@@ -12,12 +14,7 @@ export interface RegisterRequest {
 
 export interface AuthResponse {
   access_token: string;
-  user: {
-    id: string;
-    email: string;
-    firstName?: string;
-    lastName?: string;
-  };
+  user: User;
 }
 
 export interface ApiError {

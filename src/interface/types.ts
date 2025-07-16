@@ -1,10 +1,15 @@
 export interface User {
   id: string;
+  username: string;
+  fullname: string;
   email: string;
-  firstName: string;
-  lastName: string;
-  createdAt?: Date | null;
-  updatedAt?: Date | null;
+  is_deleted?: boolean;
+  is_active?: boolean;
+  created_at?: string;
+  created_by?: string | null;
+  updated_at?: string;
+  updated_by?: string | null;
+  is_valid?: boolean;
 }
 
 export interface Transaction {

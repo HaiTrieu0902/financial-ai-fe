@@ -1,15 +1,9 @@
 import { KEY_LOCALSTORAGE_SYNC } from '@/constants';
 import { useLocalStorageSync } from '@/hooks/useLocalStorageSync';
 import { AuthResponse, LoginRequest, RegisterRequest } from '@/interface/auth.interface';
+import { User } from '@/interface/types';
 import { authApiService } from '@/service/api/auth.api';
 import { useEffect, useState } from 'react';
-
-interface User {
-  id: string;
-  email: string;
-  firstName?: string;
-  lastName?: string;
-}
 
 export interface AuthContextType {
   user: User | null;
@@ -35,12 +29,10 @@ export function useAuth(): AuthContextType {
       setLoading(true);
       const response: AuthResponse = await authApiService.login(credentials);
 
-      console.log('📢 [useAuth.ts:39] response : ', response);
       setToken(response.access_token);
       setUser(response.user);
     } catch (error) {
       console.error('Login error:', error);
-      throw error;
     } finally {
       setLoading(false);
     }
