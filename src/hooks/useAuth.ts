@@ -9,7 +9,7 @@ export interface AuthContextType {
   user: User | null;
   token: string | null;
   loading: boolean;
-  login: (credentials: LoginRequest) => Promise<void>;
+  login: (credentials: LoginRequest) => Promise<AuthResponse>;
   register: (userData: RegisterRequest) => Promise<void>;
   logout: () => void;
   isAuthenticated: boolean;
@@ -24,15 +24,21 @@ export function useAuth(): AuthContextType {
     setLoading(false);
   }, []);
 
+  const delay = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
+
   const login = async (credentials: LoginRequest) => {
     try {
       setLoading(true);
       const response: AuthResponse = await authApiService.login(credentials);
 
+      await delay(1500);
       setToken(response.access_token);
       setUser(response.user);
+      // No return statement, so the function returns void
+      return response;
     } catch (error) {
       console.error('Login error:', error);
+      throw error;
     } finally {
       setLoading(false);
     }

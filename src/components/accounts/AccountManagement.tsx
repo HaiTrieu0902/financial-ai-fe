@@ -202,15 +202,16 @@ interface CreateAccountDialogProps {
   onClose: () => void;
   onSubmit: (accountData: any) => void;
   loading: boolean;
+  dict?: any;
 }
 
-const CreateAccountDialog = ({ open, onClose, onSubmit, loading }: CreateAccountDialogProps) => {
+const CreateAccountDialog = ({ open, onClose, onSubmit, loading, dict }: CreateAccountDialogProps) => {
   const { user } = useAuthContext();
   const [formData, setFormData] = useState({
     name: '',
     type: '',
     balance: '',
-    currency: 'USD',
+    currency: 'VND',
     userId: user?.id || '',
     createdBy: user?.id || '',
   });
@@ -233,11 +234,11 @@ const CreateAccountDialog = ({ open, onClose, onSubmit, loading }: CreateAccount
   return (
     <Dialog open={open} onClose={onClose} maxWidth="sm" fullWidth>
       <form onSubmit={handleSubmit}>
-        <DialogTitle>Create New Account</DialogTitle>
+        <DialogTitle>{dict?.account?.createNew}</DialogTitle>
         <DialogContent className="space-y-4">
           <TextField
             fullWidth
-            label="Account Name"
+            label={dict?.account?.title?.name}
             value={formData.name}
             onChange={(e) => handleChange('name', e.target.value)}
             required
@@ -256,7 +257,7 @@ const CreateAccountDialog = ({ open, onClose, onSubmit, loading }: CreateAccount
 
           <TextField
             fullWidth
-            label="Initial Balance"
+            label={dict?.account?.title?.initialBalance}
             type="number"
             value={formData.balance}
             onChange={(e) => handleChange('balance', e.target.value)}
@@ -276,10 +277,10 @@ const CreateAccountDialog = ({ open, onClose, onSubmit, loading }: CreateAccount
         </DialogContent>
         <DialogActions>
           <Button onClick={onClose} disabled={loading}>
-            Cancel
+            {dict?.common?.cancel}
           </Button>
           <Button type="submit" variant="contained" disabled={loading || !formData.name || !formData.type}>
-            {loading ? 'Creating...' : 'Create Account'}
+            {loading ? dict?.common?.creating : dict?.account?.createNew}
           </Button>
         </DialogActions>
       </form>
@@ -304,11 +305,13 @@ export default function AccountManagement({ dict, lang }: AccountManagementProps
   const [createDialogOpen, setCreateDialogOpen] = useState(false);
   const [selectedAccount, setSelectedAccount] = useState<AccountResponse | null>(null);
   const [detailDialogOpen, setDetailDialogOpen] = useState(false);
+  const [confirmDeleteOpen, setConfirmDeleteOpen] = useState(false);
+  const [accountToDelete, setAccountToDelete] = useState<string | null>(null);
 
   useEffect(() => {
     if (user?.id) {
       getMyAccounts();
-      getTotalBalance('USD');
+      getTotalBalance('VND');
     }
   }, [user?.id, getMyAccounts, getTotalBalance]);
 
@@ -317,21 +320,15 @@ export default function AccountManagement({ dict, lang }: AccountManagementProps
       await createAccount(accountData);
       setCreateDialogOpen(false);
       await refreshAccounts();
-      await getTotalBalance('USD');
+      await getTotalBalance('VND');
     } catch (error) {
       console.error('Failed to create account:', error);
     }
   };
 
-  const handleDeleteAccount = async (id: string) => {
-    if (window.confirm('Are you sure you want to delete this account?')) {
-      try {
-        await deleteAccount(id);
-        await getTotalBalance('USD');
-      } catch (error) {
-        console.error('Failed to delete account:', error);
-      }
-    }
+  const handleDeleteAccount = (id: string) => {
+    setAccountToDelete(id);
+    setConfirmDeleteOpen(true);
   };
 
   const handleEditAccount = (account: AccountResponse) => {
@@ -348,7 +345,7 @@ export default function AccountManagement({ dict, lang }: AccountManagementProps
     return (
       <Box className="py-8">
         <Typography variant="h4" className="mb-6 font-bold text-gray-800">
-          Account Management
+          {dict?.account?.title?.accountManagement}
         </Typography>
         <Grid container spacing={3}>
           {[1, 2, 3, 4].map((item) => (
@@ -365,7 +362,7 @@ export default function AccountManagement({ dict, lang }: AccountManagementProps
     <Box className="py-8">
       <Box className="flex justify-between items-center mb-6">
         <Typography variant="h4" className="font-bold text-gray-800">
-          Account Management
+          {dict?.account?.title?.accountManagement}
         </Typography>
         <Button
           variant="contained"
@@ -373,7 +370,7 @@ export default function AccountManagement({ dict, lang }: AccountManagementProps
           onClick={() => setCreateDialogOpen(true)}
           className="bg-blue-600 hover:bg-blue-700"
         >
-          Add Account
+          {dict?.common?.add}
         </Button>
       </Box>
 
@@ -395,13 +392,13 @@ export default function AccountManagement({ dict, lang }: AccountManagementProps
         <Card className="mb-6 bg-gradient-to-r from-blue-600 to-purple-600 text-white">
           <CardContent>
             <Typography variant="h6" className="mb-2">
-              Total Balance
+              {dict?.account?.totalBalance}
             </Typography>
             <Typography variant="h3" className="font-bold">
               {formatCurrency(totalBalance, 'USD')}
             </Typography>
             <Typography variant="body2" className="opacity-90">
-              Across {accounts.length} account
+              {dict?.account?.across} {accounts.length} {dict?.account?.account}
             </Typography>
           </CardContent>
         </Card>
@@ -425,13 +422,13 @@ export default function AccountManagement({ dict, lang }: AccountManagementProps
         <Box className="text-center py-12">
           <AccountBalance className="text-6xl text-gray-400 mb-4" />
           <Typography variant="h6" className="text-gray-600 mb-2">
-            No accounts found
+            {dict?.account?.message?.notFound}
           </Typography>
           <Typography variant="body2" className="text-gray-500 mb-4">
-            Create your first account to get started
+            {dict?.account?.message?.createfirstToGetStarted}
           </Typography>
           <Button variant="contained" startIcon={<Add />} onClick={() => setCreateDialogOpen(true)}>
-            Create Account
+            {dict?.common?.add}
           </Button>
         </Box>
       )}
@@ -447,6 +444,7 @@ export default function AccountManagement({ dict, lang }: AccountManagementProps
         onClose={() => setCreateDialogOpen(false)}
         onSubmit={handleCreateAccount}
         loading={loading}
+        dict={dict}
       />
 
       {/* Account Detail Dialog */}
@@ -455,6 +453,37 @@ export default function AccountManagement({ dict, lang }: AccountManagementProps
         onClose={() => setDetailDialogOpen(false)}
         account={selectedAccount}
       />
+
+      <Dialog open={confirmDeleteOpen} onClose={() => setConfirmDeleteOpen(false)}>
+        <DialogTitle>{dict?.common?.confirm}</DialogTitle>
+        <DialogContent>
+          <Typography>
+            {dict?.account?.message?.confirmDelete || 'Are you sure you want to delete this account?'}
+          </Typography>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => setConfirmDeleteOpen(false)}>{dict?.common?.cancel}</Button>
+          <Button
+            onClick={async () => {
+              if (accountToDelete) {
+                try {
+                  await deleteAccount(accountToDelete);
+                  await getTotalBalance('VND');
+                } catch (error) {
+                  console.error('Failed to delete account:', error);
+                } finally {
+                  setConfirmDeleteOpen(false);
+                  setAccountToDelete(null);
+                }
+              }
+            }}
+            color="error"
+            variant="contained"
+          >
+            {dict?.common?.delete || 'Delete'}
+          </Button>
+        </DialogActions>
+      </Dialog>
     </Box>
   );
 }

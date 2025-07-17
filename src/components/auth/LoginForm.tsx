@@ -14,6 +14,7 @@ import {
   InputAdornment,
   Link as MuiLink,
   Paper,
+  Snackbar,
   TextField,
   Typography,
 } from '@mui/material';
@@ -31,6 +32,8 @@ export default function LoginForm({ dict, lang }: LoginFormProps) {
   const [form, setForm] = useState({ email: '', password: '' });
   const [error, setError] = useState('');
   const [showPassword, setShowPassword] = useState(false);
+  const [openSnackbar, setOpenSnackbar] = useState(false);
+  const [shouldNavigate, setShouldNavigate] = useState(false);
   const [isPending, startTransition] = useTransition();
   const router = useRouter();
 
@@ -42,10 +45,16 @@ export default function LoginForm({ dict, lang }: LoginFormProps) {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError('');
+
     startTransition(async () => {
       try {
-        await login(form);
-        router.push(`/${lang}/${PATH_DEFAULT.dashboard}`);
+        const res = await login(form);
+        setOpenSnackbar(true);
+
+        // Add delay to show success message before navigation
+        setTimeout(() => {
+          router.push(`/${lang}/${PATH_DEFAULT.dashboard}`);
+        }, 1500); // Same duration as autoHideDuration
       } catch {
         setError(dict.auth.login.invalid || 'An error occurred during login');
       }
@@ -85,7 +94,7 @@ export default function LoginForm({ dict, lang }: LoginFormProps) {
             {error && (
               <Fade in>
                 <Alert severity="error" className="mb-6 rounded-xl border-0">
-                  o{error}
+                  {error}
                 </Alert>
               </Fade>
             )}
@@ -143,7 +152,7 @@ export default function LoginForm({ dict, lang }: LoginFormProps) {
                 fullWidth
                 variant="contained"
                 disabled={isPending}
-                className=" rounded-xl font-semibold text-lg shadow-lg transition-all duration-300 hover:shadow-xl hover:-translate-y-0.5"
+                className="rounded-xl font-semibold text-lg shadow-lg transition-all duration-300 hover:shadow-xl hover:-translate-y-0.5"
                 sx={{
                   background: isPending
                     ? 'linear-gradient(135deg, #9ca3af 0%, #6b7280 100%)'
@@ -183,6 +192,18 @@ export default function LoginForm({ dict, lang }: LoginFormProps) {
           </Paper>
         </Grow>
       </Container>
+
+      {/* Success Snackbar */}
+      <Snackbar
+        open={openSnackbar}
+        autoHideDuration={1500}
+        onClose={() => setOpenSnackbar(false)}
+        anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
+      >
+        <Alert onClose={() => setOpenSnackbar(false)} severity="success" sx={{ width: '100%' }}>
+          {dict.auth.login.success}
+        </Alert>
+      </Snackbar>
     </div>
   );
 }

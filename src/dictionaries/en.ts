@@ -1,3 +1,5 @@
+import { notFound } from 'next/navigation';
+
 export default {
   // Navigation
   navigation: {
@@ -31,6 +33,8 @@ export default {
       submit: 'Login',
       noAccount: "Don't have an account?",
       signUp: 'Sign up',
+      invalid: 'Invalid email or password or account not found',
+      success: 'Login successful! Redirecting to dashboard...',
     },
     register: {
       title: 'Create Your Account',
@@ -76,7 +80,46 @@ export default {
     save: 'Save',
     cancel: 'Cancel',
     delete: 'Delete',
+    logout: 'Logout',
     edit: 'Edit',
     close: 'Close',
+    deleting: 'Deleting...',
+    creating: 'Creating...',
+    updating: 'Updating...',
+    add: 'Add',
+    update: 'Update',
+  },
+
+  // user profile
+  user: {
+    message: {
+      failedToLoadUserProfile: 'Failed to load user profile. Please try again.',
+      profileUpdated: 'Profile updated successfully.',
+      profileUpdateFailed: 'Failed to update profile. Please check your input.',
+      deleteUserError: 'Failed to delete user account. Please try again.',
+      doYouWantToDelete:
+        'Are you sure you want to delete your account? This action cannot be undone. All your data including accountsand transactions will be permanently removed.',
+    },
+  },
+
+  account: {
+    title: {
+      accountManagement: 'Account Management',
+      totalBalance: 'Total Balance',
+      across: 'Across',
+      account: 'account',
+      name: 'Account Name',
+      initialBalance: 'Initial Balance',
+    },
+    message: {
+      notFound: 'Account not found.',
+      createfirstToGetStarted: 'Create your first account to get started.',
+      accountCreated: 'Account created successfully.',
+      accountCreationFailed: 'Failed to create account. Please check your input.',
+      accountUpdated: 'Account updated successfully.',
+      accountUpdateFailed: 'Failed to update account. Please try again.',
+      accountDeleted: 'Account deleted successfully.',
+      accountDeletionFailed: 'Failed to delete account. Please try again.',
+    },
   },
 };

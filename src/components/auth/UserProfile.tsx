@@ -64,7 +64,6 @@ export default function UserProfile({ onLogout, dict, lang }: UserProfileProps) 
   const [editData, setEditData] = useState({
     username: '',
     fullname: '',
-    email: '',
   });
 
   // Fetch user profile details
@@ -77,10 +76,9 @@ export default function UserProfile({ onLogout, dict, lang }: UserProfileProps) 
       setEditData({
         username: profile.username || '',
         fullname: profile.fullname || '',
-        email: profile.email || '',
       });
     } catch (err: any) {
-      setError(err.message || 'Failed to fetch user profile');
+      setError(err.message || dict?.user?.message?.failedToLoadUserProfile);
     } finally {
       setLoading(false);
     }
@@ -103,7 +101,6 @@ export default function UserProfile({ onLogout, dict, lang }: UserProfileProps) 
     setEditData({
       username: userDetail?.username || '',
       fullname: userDetail?.fullname || '',
-      email: userDetail?.email || '',
     });
   };
 
@@ -115,11 +112,11 @@ export default function UserProfile({ onLogout, dict, lang }: UserProfileProps) 
       if (!userDetail?.id) return;
 
       await authApiService.updateUser(userDetail.id, editData);
-      setSuccess('Profile updated successfully!');
+      setSuccess(dict.user.message.profileUpdated);
       setEditing(false);
       await fetchUserProfile();
     } catch (err: any) {
-      setError(err.message || 'Failed to update profile');
+      setError(err.message || dict.user.message.profileUpdateFailed);
     } finally {
       setLoading(false);
     }
@@ -134,7 +131,7 @@ export default function UserProfile({ onLogout, dict, lang }: UserProfileProps) 
       logout();
       onLogout?.();
     } catch (err: any) {
-      setError(err.message || 'Failed to delete account');
+      setError(err.message || dict.user.message.deleteUserError);
     } finally {
       setLoading(false);
       setDeleteDialogOpen(false);
@@ -163,7 +160,7 @@ export default function UserProfile({ onLogout, dict, lang }: UserProfileProps) 
     return (
       <Card>
         <CardContent>
-          <Alert severity="error">Failed to load user profile. Please try again.</Alert>
+          <Alert severity="error">{dict?.user?.message?.failedToLoadUserProfile}</Alert>
         </CardContent>
       </Card>
     );
@@ -233,19 +230,9 @@ export default function UserProfile({ onLogout, dict, lang }: UserProfileProps) 
                     <Typography variant="body2" className="text-gray-500 mb-1">
                       Email Address
                     </Typography>
-                    {editing ? (
-                      <TextField
-                        fullWidth
-                        value={editData.email}
-                        onChange={(e) => setEditData((prev) => ({ ...prev, email: e.target.value }))}
-                        size="small"
-                        type="email"
-                      />
-                    ) : (
-                      <Typography variant="body1" className="font-medium">
-                        {userDetail.email}
-                      </Typography>
-                    )}
+                    <Typography variant="body1" className="font-medium">
+                      {userDetail.email}
+                    </Typography>
                   </Box>
                 </Box>
 
@@ -306,21 +293,21 @@ export default function UserProfile({ onLogout, dict, lang }: UserProfileProps) 
                   {loading ? 'Saving...' : 'Save Changes'}
                 </Button>
                 <Button variant="outlined" startIcon={<Cancel />} onClick={handleCancelEdit} disabled={loading}>
-                  Cancel
+                  {dict?.common?.cancel}
                 </Button>
               </Box>
             ) : (
               <Button variant="outlined" startIcon={<Edit />} onClick={handleEdit} disabled={loading}>
-                Edit Profile
+                {dict?.common?.edit}
               </Button>
             )}
 
             <Box className="flex gap-2">
               <Button variant="outlined" startIcon={<Logout />} onClick={handleLogout} color="primary">
-                Logout
+                {dict?.common?.logout}
               </Button>
               <Button variant="outlined" startIcon={<Delete />} onClick={() => setDeleteDialogOpen(true)} color="error">
-                Delete Account
+                {dict?.common?.delete}
               </Button>
             </Box>
           </Box>
@@ -341,17 +328,14 @@ export default function UserProfile({ onLogout, dict, lang }: UserProfileProps) 
 
       {/* Delete Confirmation Dialog */}
       <Dialog open={deleteDialogOpen} onClose={() => setDeleteDialogOpen(false)}>
-        <DialogTitle className="text-red-600">Delete Account</DialogTitle>
+        <DialogTitle className="text-red-600"> {dict?.common?.delete}</DialogTitle>
         <DialogContent>
-          <Typography>
-            Are you sure you want to delete your account? This action cannot be undone. All your data including accounts
-            and transactions will be permanently removed.
-          </Typography>
+          <Typography>{dict?.user?.message?.doYouWantToDelete}</Typography>
         </DialogContent>
         <DialogActions>
-          <Button onClick={() => setDeleteDialogOpen(false)}>Cancel</Button>
+          <Button onClick={() => setDeleteDialogOpen(false)}>{dict?.common?.cancel}</Button>
           <Button onClick={handleDeleteAccount} color="error" variant="contained" disabled={loading}>
-            {loading ? 'Deleting...' : 'Delete Account'}
+            {loading ? dict?.common?.deleting : dict?.common?.delete}
           </Button>
         </DialogActions>
       </Dialog>
