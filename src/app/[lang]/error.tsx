@@ -1,18 +1,12 @@
-'use client'
+'use client';
 
-import { Box, Typography, Button } from '@mui/material'
-import { useEffect } from 'react'
+import { Box, Typography, Button } from '@mui/material';
+import { useEffect } from 'react';
 
-export default function Error({
-  error,
-  reset,
-}: {
-  error: Error & { digest?: string }
-  reset: () => void
-}) {
+export default function Error({ error, reset }: { error: Error & { digest?: string }; reset: () => void }) {
   useEffect(() => {
-    console.error(error)
-  }, [error])
+    console.error(error);
+  }, [error]);
 
   return (
     <Box
@@ -34,5 +28,5 @@ export default function Error({
         Try again
       </Button>
     </Box>
-  )
+  );
 }

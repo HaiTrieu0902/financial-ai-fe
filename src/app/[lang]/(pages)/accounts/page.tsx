@@ -1,14 +1,8 @@
+'use client';
 import AccountManagement from '@/components/accounts/AccountManagement';
-import { getDictionary } from '@/dictionaries';
-import { Locale } from '@/i18n-config';
+import { useI18n } from '@/context/I18nContext';
 
-interface AccountsPageProps {
-  params: Promise<{ lang: Locale }>;
-}
-
-export default async function AccountsPage({ params }: AccountsPageProps) {
-  const { lang } = await params;
-  const dict = await getDictionary(lang);
-
-  return <AccountManagement />;
+export default function AccountsPage() {
+  const { dict, lang } = useI18n();
+  return <AccountManagement dict={dict} lang={lang} />;
 }

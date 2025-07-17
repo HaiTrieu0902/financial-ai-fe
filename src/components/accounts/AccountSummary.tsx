@@ -2,16 +2,24 @@
 
 import { AccountResponse } from '@/interface/account.interface';
 import { formatCurrency } from '@/utils';
-import { AccountBalance, TrendingUp, TrendingDown, Add, Remove } from '@mui/icons-material';
-import { Card, CardContent, Typography, Box, LinearProgress, Chip, Grid } from '@mui/material';
+import { AccountBalance, TrendingDown, TrendingUp } from '@mui/icons-material';
+import { Box, Card, CardContent, Chip, Grid, LinearProgress, Typography } from '@mui/material';
 
 interface AccountSummaryProps {
-  accounts: AccountResponse[];
+  accounts?: AccountResponse[];
   totalBalance: number;
   currency?: string;
 }
 
-export function AccountSummary({ accounts, totalBalance, currency = 'USD' }: AccountSummaryProps) {
+export function AccountSummary({ accounts = [], totalBalance, currency = 'USD' }: AccountSummaryProps) {
+  // Early return if accounts is not properly initialized
+  if (!accounts || !Array.isArray(accounts)) {
+    return (
+      <Box className="space-y-4">
+        <Typography variant="h6">No account data available</Typography>
+      </Box>
+    );
+  }
   const getAccountsByType = () => {
     const accountTypes = accounts.reduce((acc, account) => {
       const type = account.type.toLowerCase();
@@ -35,7 +43,7 @@ export function AccountSummary({ accounts, totalBalance, currency = 'USD' }: Acc
   const positiveAccounts = accounts.filter((acc) => acc.balance > 0);
   const negativeAccounts = accounts.filter((acc) => acc.balance < 0);
 
-  const getTypeColor = (type: string) => {
+  const getTypeColor = (type: string): 'success' | 'primary' | 'error' | 'default' => {
     switch (type) {
       case 'savings':
         return 'success';
@@ -45,6 +53,21 @@ export function AccountSummary({ accounts, totalBalance, currency = 'USD' }: Acc
         return 'error';
       default:
         return 'default';
+    }
+  };
+
+  const getProgressColor = (
+    type: string,
+  ): 'primary' | 'secondary' | 'error' | 'info' | 'success' | 'warning' | 'inherit' => {
+    switch (type) {
+      case 'savings':
+        return 'success';
+      case 'checking':
+        return 'primary';
+      case 'credit':
+        return 'error';
+      default:
+        return 'primary';
     }
   };
 
@@ -147,7 +170,7 @@ export function AccountSummary({ accounts, totalBalance, currency = 'USD' }: Acc
                   <Box className="flex items-center gap-2">
                     <Chip
                       label={type.charAt(0).toUpperCase() + type.slice(1)}
-                      color={getTypeColor(type) as any}
+                      color={getTypeColor(type)}
                       size="small"
                       variant="outlined"
                     />
@@ -163,7 +186,7 @@ export function AccountSummary({ accounts, totalBalance, currency = 'USD' }: Acc
                   variant="determinate"
                   value={getTypeProgress(data.balance)}
                   className="h-2 rounded-full"
-                  color={getTypeColor(type) as any}
+                  color={getProgressColor(type)}
                 />
                 <Typography variant="caption" className="text-gray-500">
                   {getTypeProgress(data.balance).toFixed(1)}% of total

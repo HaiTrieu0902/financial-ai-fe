@@ -42,7 +42,6 @@ export default function LoginForm({ dict, lang }: LoginFormProps) {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError('');
-
     startTransition(async () => {
       try {
         await login(form);

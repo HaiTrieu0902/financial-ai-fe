@@ -29,7 +29,10 @@ import { Button } from '@mui/material';
 
 function HybridButton() {
   return (
-    <Button variant="contained" className="bg-gradient-to-r from-blue-600 to-purple-600 hover:scale-105 transition-transform duration-300">
+    <Button
+      variant="contained"
+      className="bg-gradient-to-r from-blue-600 to-purple-600 hover:scale-105 transition-transform duration-300"
+    >
       Hybrid Button
     </Button>
   );
@@ -42,7 +45,9 @@ For custom components where you need full control:
 
 ```tsx
 function CustomCard({ children }) {
-  return <div className="bg-white rounded-xl shadow-lg p-6 hover:shadow-xl transition-shadow duration-300">{children}</div>;
+  return (
+    <div className="bg-white rounded-xl shadow-lg p-6 hover:shadow-xl transition-shadow duration-300">{children}</div>
+  );
 }
 ```
 
@@ -167,7 +172,10 @@ function LoginForm() {
 import { useOptimistic } from 'react';
 
 function MessageList({ messages }) {
-  const [optimisticMessages, addOptimisticMessage] = useOptimistic(messages, (state, newMessage) => [...state, newMessage]);
+  const [optimisticMessages, addOptimisticMessage] = useOptimistic(messages, (state, newMessage) => [
+    ...state,
+    newMessage,
+  ]);
 
   // UI with optimistic updates
 }

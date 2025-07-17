@@ -4,9 +4,6 @@ import { useI18n } from '@/context/I18nContext';
 
 export default function LoginPage() {
   const { dict, lang, loading } = useI18n();
-
-  console.log('LoginPage - Current Language:', lang);
-  console.log('LoginPage - Current Dictionary:', dict);
   if (loading) {
     return (
       <div className="flex items-center justify-center min-h-screen">

@@ -1,57 +1,62 @@
 'use client';
 
-import { useAccount } from '@/hooks/useAccount';
 import { useAuthContext } from '@/context/useAuthContext';
+import { useAccount } from '@/hooks/useAccount';
+import { Locale } from '@/i18n-config';
 import { AccountResponse } from '@/interface/account.interface';
 import { formatCurrency } from '@/utils';
 import {
   AccountBalance,
+  AccountBalanceWallet,
   Add,
+  CreditCard,
   Delete,
   Edit,
   MoreVert,
-  Visibility,
-  AccountBalanceWallet,
-  CreditCard,
   Savings,
+  Visibility,
 } from '@mui/icons-material';
 import {
+  Alert,
   Box,
+  Button,
   Card,
   CardContent,
-  Typography,
+  Chip,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
+  Divider,
+  Fab,
+  FormControl,
   Grid,
   IconButton,
-  Menu,
-  MenuItem,
-  Chip,
-  Button,
-  Skeleton,
-  Alert,
-  Container,
-  Fab,
-  Dialog,
-  DialogTitle,
-  DialogContent,
-  DialogActions,
-  TextField,
-  FormControl,
   InputLabel,
-  Select,
-  MenuItem as SelectMenuItem,
-  Divider,
   ListItemIcon,
   ListItemText,
+  Menu,
+  MenuItem,
+  Select,
+  MenuItem as SelectMenuItem,
+  Skeleton,
+  TextField,
+  Typography,
 } from '@mui/material';
+import { useEffect, useState } from 'react';
 import { AccountDetailDialog } from './AccountDetailDialog';
 import { AccountSummary } from './AccountSummary';
-import { useEffect, useState } from 'react';
 
 interface AccountCardProps {
   account: AccountResponse;
   onEdit: (account: AccountResponse) => void;
   onDelete: (id: string) => void;
   onView: (account: AccountResponse) => void;
+}
+
+interface AccountManagementProps {
+  dict: any;
+  lang: Locale;
 }
 
 const AccountCard = ({ account, onEdit, onDelete, onView }: AccountCardProps) => {
@@ -282,7 +287,7 @@ const CreateAccountDialog = ({ open, onClose, onSubmit, loading }: CreateAccount
   );
 };
 
-export default function AccountManagement() {
+export default function AccountManagement({ dict, lang }: AccountManagementProps) {
   const {
     accounts,
     totalBalance,
@@ -379,7 +384,7 @@ export default function AccountManagement() {
       )}
 
       {/* Account Summary */}
-      {accounts.length > 0 && (
+      {accounts && Array.isArray(accounts) && accounts.length > 0 && (
         <Box className="mb-6">
           <AccountSummary accounts={accounts} totalBalance={totalBalance} currency="USD" />
         </Box>
@@ -396,7 +401,7 @@ export default function AccountManagement() {
               {formatCurrency(totalBalance, 'USD')}
             </Typography>
             <Typography variant="body2" className="opacity-90">
-              Across {accounts.length} account{accounts.length !== 1 ? 's' : ''}
+              Across {accounts.length} account
             </Typography>
           </CardContent>
         </Card>

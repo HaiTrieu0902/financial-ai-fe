@@ -79,4 +79,4 @@ module.exports = {
   corePlugins: {
     preflight: false, // Disable Tailwind's CSS reset to avoid conflicts with MUI
   },
-}
+};

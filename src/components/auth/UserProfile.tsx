@@ -1,6 +1,7 @@
 'use client';
 
 import { useAuthContext } from '@/context/useAuthContext';
+import { Locale } from '@/i18n-config';
 import { User } from '@/interface/types';
 import { authApiService } from '@/service/api/auth.api';
 import { Badge, Cancel, Delete, Edit, Email, Logout, Person, Save, Security } from '@mui/icons-material';
@@ -26,6 +27,8 @@ import { useEffect, useState } from 'react';
 
 interface UserProfileProps {
   onLogout?: () => void;
+  dict: any;
+  lang: Locale;
 }
 
 const ProfileSkeleton = () => (
@@ -49,7 +52,7 @@ const ProfileSkeleton = () => (
   </Card>
 );
 
-export default function UserProfile({ onLogout }: UserProfileProps) {
+export default function UserProfile({ onLogout, dict, lang }: UserProfileProps) {
   const { user, logout, loading: authLoading } = useAuthContext();
   const [userDetail, setUserDetail] = useState<User | null>(null);
   const [loading, setLoading] = useState(false);

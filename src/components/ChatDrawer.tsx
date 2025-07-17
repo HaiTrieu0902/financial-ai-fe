@@ -1,24 +1,22 @@
 'use client';
 
-import { useState, useRef, useEffect } from 'react';
-import {
-  Drawer,
-  Box,
-  TextField,
-  IconButton,
-  Typography,
-  Paper,
-  AppBar,
-  Toolbar,
-  Chip,
-  CircularProgress,
-  Avatar,
-  Divider,
-  Button,
-} from '@mui/material';
-import { Send, Close, SmartToy, Person, RestartAlt, ChatBubbleOutline } from '@mui/icons-material';
 import { ChatMessage } from '@/interface/types';
 import { generateId } from '@/utils';
+import { ChatBubbleOutline, Close, Person, RestartAlt, Send, SmartToy } from '@mui/icons-material';
+import {
+  AppBar,
+  Avatar,
+  Box,
+  Button,
+  Divider,
+  Drawer,
+  IconButton,
+  Paper,
+  TextField,
+  Toolbar,
+  Typography,
+} from '@mui/material';
+import { useEffect, useRef, useState } from 'react';
 
 interface ChatDrawerProps {
   open: boolean;
