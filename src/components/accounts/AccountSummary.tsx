@@ -3,7 +3,7 @@
 import { AccountResponse } from '@/interface/account.interface';
 import { formatCurrency } from '@/utils';
 import { AccountBalance, TrendingDown, TrendingUp } from '@mui/icons-material';
-import { Box, Card, CardContent, Chip, Grid, LinearProgress, Typography } from '@mui/material';
+import { Box, Card, CardContent, Grid, Typography } from '@mui/material';
 
 interface AccountSummaryProps {
   accounts?: AccountResponse[];
@@ -40,6 +40,7 @@ export function AccountSummary({ accounts = [], totalBalance, currency = 'USD' }
   };
 
   const accountsByType = getAccountsByType();
+
   const positiveAccounts = accounts.filter((acc) => acc.balance > 0);
   const negativeAccounts = accounts.filter((acc) => acc.balance < 0);
 
@@ -81,7 +82,7 @@ export function AccountSummary({ accounts = [], totalBalance, currency = 'USD' }
       {/* Overview Cards */}
       <Grid container spacing={3}>
         <Grid item xs={12} sm={6} md={3}>
-          <Card className="bg-gradient-to-r from-blue-500 to-blue-600 text-white">
+          <Card className="bg-gradient-to-r from-slate-600 to-slate-700 text-white">
             <CardContent>
               <Box className="flex items-center justify-between">
                 <Box>
@@ -99,7 +100,7 @@ export function AccountSummary({ accounts = [], totalBalance, currency = 'USD' }
         </Grid>
 
         <Grid item xs={12} sm={6} md={3}>
-          <Card className="bg-gradient-to-r from-green-500 to-green-600 text-white">
+          <Card className="bg-gradient-to-r from-emerald-500 to-emerald-600 text-white">
             <CardContent>
               <Box className="flex items-center justify-between">
                 <Box>
@@ -117,7 +118,7 @@ export function AccountSummary({ accounts = [], totalBalance, currency = 'USD' }
         </Grid>
 
         <Grid item xs={12} sm={6} md={3}>
-          <Card className="bg-gradient-to-r from-red-500 to-red-600 text-white">
+          <Card className="bg-gradient-to-r from-orange-500 to-orange-600 text-white">
             <CardContent>
               <Box className="flex items-center justify-between">
                 <Box>
@@ -135,7 +136,7 @@ export function AccountSummary({ accounts = [], totalBalance, currency = 'USD' }
         </Grid>
 
         <Grid item xs={12} sm={6} md={3}>
-          <Card className="bg-gradient-to-r from-purple-500 to-purple-600 text-white">
+          <Card className="bg-gradient-to-r from-indigo-500 to-indigo-600 text-white">
             <CardContent>
               <Box className="flex items-center justify-between">
                 <Box>
@@ -157,46 +158,6 @@ export function AccountSummary({ accounts = [], totalBalance, currency = 'USD' }
         </Grid>
       </Grid>
 
-      {/* Account Type Breakdown */}
-      <Card>
-        <CardContent>
-          <Typography variant="h6" className="mb-4 font-semibold">
-            Account Breakdown by Type
-          </Typography>
-          <Box className="space-y-4">
-            {Object.entries(accountsByType).map(([type, data]) => (
-              <Box key={type}>
-                <Box className="flex justify-between items-center mb-2">
-                  <Box className="flex items-center gap-2">
-                    <Chip
-                      label={type.charAt(0).toUpperCase() + type.slice(1)}
-                      color={getTypeColor(type)}
-                      size="small"
-                      variant="outlined"
-                    />
-                    <Typography variant="body2" className="text-gray-600">
-                      {data.count} account{data.count !== 1 ? 's' : ''}
-                    </Typography>
-                  </Box>
-                  <Typography variant="body1" className="font-semibold">
-                    {formatCurrency(data.balance, currency)}
-                  </Typography>
-                </Box>
-                <LinearProgress
-                  variant="determinate"
-                  value={getTypeProgress(data.balance)}
-                  className="h-2 rounded-full"
-                  color={getProgressColor(type)}
-                />
-                <Typography variant="caption" className="text-gray-500">
-                  {getTypeProgress(data.balance).toFixed(1)}% of total
-                </Typography>
-              </Box>
-            ))}
-          </Box>
-        </CardContent>
-      </Card>
-
       {/* Quick Stats */}
       <Card>
         <CardContent>
@@ -208,7 +169,7 @@ export function AccountSummary({ accounts = [], totalBalance, currency = 'USD' }
               <Box className="text-center">
                 <Typography variant="h4" className="font-bold text-green-600 mb-1">
                   {formatCurrency(
-                    positiveAccounts.reduce((sum, acc) => sum + acc.balance, 0),
+                    positiveAccounts.reduce((sum, acc) => sum + Number(acc.balance), 0),
                     currency,
                   )}
                 </Typography>

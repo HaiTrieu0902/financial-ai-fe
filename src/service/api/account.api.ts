@@ -4,7 +4,7 @@ import client from '.';
 class AccountApiService {
   // Account endpoints
   async createAccount(account: Account): Promise<AccountResponse> {
-    const response = await client.post<AccountResponse>('/accounts/register', account);
+    const response = await client.post<AccountResponse>('/accounts', account);
     return response.data;
   }
 
